@@ -1,11 +1,21 @@
 <template>
     <div id="app">
-      <div class="column is-half is-offset-one-quarter">
-        <img src="./assets/pokedex.png" alt="Logo">
-        <div v-for="(poke, index) in pokemons" :key="index">
-          <PokemonList :num="index + 1" :name="poke.name" :url="poke.url" />
+        <div class="column is-half is-offset-one-quarter">
+            <img src="./assets/pokedex.png" alt="Logo" />
+            <input
+                class="input is-normal is-warning"
+                type="text"
+                placeholder="Buscar pokémon"
+                v-model="search"
+            />
+            <div v-for="(poke, index) in searchResult" :key="poke.url">
+                <PokemonList
+                    :num="index + 1"
+                    :name="poke.name"
+                    :url="poke.url"
+                />
+            </div>
         </div>
-      </div>
     </div>
 </template>
 
@@ -19,6 +29,7 @@ export default {
     data() {
         return {
             pokemons: [],
+            search: '',
         }
     },
     created: function () {
@@ -34,6 +45,19 @@ export default {
     components: {
         PokemonList,
     },
+    computed: {
+        searchResult: function () {
+            if (this.search == '' || this.search == ' ') {
+                return this.pokemons
+            } else {
+                return this.pokemons.filter((pokemon) =>
+                    pokemon.name
+                        .toLowerCase()
+                        .includes(this.search.toLowerCase())
+                )
+            }
+        },
+    },
 }
 </script>
 
@@ -45,5 +69,9 @@ export default {
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
+}
+
+#searchBtn {
+    margin-top: 1%;
 }
 </style>

@@ -1,27 +1,36 @@
 <template>
-    <div id="app"></div>
+    <div id="app">
+        <div v-for="(poke, index) in pokemons" :key="index">
+            <PokemonList :num="index + 1" :name="poke.name" :url="poke.url" />
+        </div>
+    </div>
 </template>
 
 <script>
 import axios from 'axios'
 
+import PokemonList from './components/PokemonList.vue'
+
 export default {
     name: 'App',
     data() {
-      return {
-        pokemons: []
-      }
+        return {
+            pokemons: [],
+        }
     },
-    created: function() {
-      axios
-        .get('https://pokeapi.co/api/v2/pokemon?limit=151&offset=0')
-        .then(res => {
-          this.pokemons = res.data.results
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    }
+    created: function () {
+        axios
+            .get('https://pokeapi.co/api/v2/pokemon?limit=151&offset=0')
+            .then((res) => {
+                this.pokemons = res.data.results
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    },
+    components: {
+        PokemonList,
+    },
 }
 </script>
 
